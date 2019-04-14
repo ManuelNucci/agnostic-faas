@@ -41,10 +41,10 @@ function AgnosticFaaS(config) {
 			}
 		},
 		pubsub: (fn, triggerOptions) => {
-/*
-			if (typeof triggerOptions.topic === "undefined")
-				throw new Error('Function ' + fn.module + ' doesn\'t have a topic defined in functions.json.')
-*/
+			/*
+				  if (typeof triggerOptions.topic === "undefined")
+					throw new Error('Function ' + fn.module + ' doesn\'t have a topic defined in functions.json.')
+			*/
 			return event => {
 				let params = { data: JSON.parse(Buffer.from(event.data, 'base64').toString()), attributes: event.attributes }
 
@@ -56,10 +56,10 @@ function AgnosticFaaS(config) {
 
 		},
 		onCreate: (fn, triggerOptions) => {
-/*
-			if (typeof triggerOptions.document === "undefined")
-				throw new Error('Function ' + fn.module + ' doesn\'t have a document defined in functions.json.')
-*/
+			/*
+				  if (typeof triggerOptions.document === "undefined")
+					throw new Error('Function ' + fn.module + ' doesn\'t have a document defined in functions.json.')
+			*/
 			return (snap, context) => {
 				context.snap = snap
 				let params = { data: snap.data(), context: context }
@@ -72,13 +72,13 @@ function AgnosticFaaS(config) {
 
 		},
 		onUpdate: (fn, triggerOptions) => {
-/*
-			if (typeof triggerOptions.document === "undefined")
-				throw new Error('Function ' + fn.module + ' doesn\'t have a document defined in functions.json.')
-*/
+			/*
+				  if (typeof triggerOptions.document === "undefined")
+					throw new Error('Function ' + fn.module + ' doesn\'t have a document defined in functions.json.')
+			*/
 			return (change, context) => {
 				context.change = change
-				let params = { data: {newValue: change.after.data(), oldValue: change.before.data()}, context: context }
+				let params = { data: { newValue: change.after.data(), oldValue: change.before.data() }, context: context }
 
 				return fn.implementation(params)
 					.catch((e) => {
@@ -92,7 +92,7 @@ function AgnosticFaaS(config) {
 	const defineFunction = (fn, trigger) => functionTriggers[trigger.type](fn, trigger.options)
 
 	// populate functions with modules for connectors & exports
-	for (var i=0; i < keys.length; i++) {
+	for (var i = 0; i < keys.length; i++) {
 		let name = keys[i]
 		functionList[name] = {
 			implementation: require('./src/functions/' + config[name].module),
@@ -104,7 +104,7 @@ function AgnosticFaaS(config) {
 
 		let fnExports = {}
 
-		for (var i=0; i < keys.length; i++) {
+		for (var i = 0; i < keys.length; i++) {
 			let name = keys[i]
 			functionList[name].triggers.map((trigger) => {
 				// replace function name if it's defined by user; if not, use file name
